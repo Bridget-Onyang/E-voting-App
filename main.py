@@ -1,43 +1,48 @@
 import time
-from ui import *
-from utils import *
-from storage import *
-import auth             # We use the module name to access its variables
+
+import auth
 import admin_business
+import storage
+import ui
 import voter_business
 
-### main app
+
+LOADING_DELAY_SECONDS = 1
+
+
+def _reset_session():
+    admin_business.set_current_user(None)
+    voter_business.set_current_user(None)
+    storage.current_user = None
+    storage.current_role = None
+
+
 def main():
-    print(f"\n  {THEME_LOGIN}Loading E-Voting System...{RESET}")
-    load_data()
-    time.sleep(1)
-    
+    """Run the interactive console application loop."""
+    print(f"\n  {ui.THEME_LOGIN}Loading E-Voting System...{ui.RESET}")
+    storage.load_data()
+    time.sleep(LOADING_DELAY_SECONDS)
+
     while True:
-        clear_screen()
-        
-        # 1. Run the login from the auth module
-        logged_in = auth.login()
-        
-        if logged_in:
-            # 2. SYNC: Fetch the user and role from the auth module
-            # and push them into the business modules
-            user = auth.current_user
-            role = auth.current_role
-            
-            admin_business.current_user = user
-            voter_business.current_user = user
-            
-            # 3. Check the role from the auth module to decide which dashboard to open
-            if role == "admin": 
-                admin_business.admin_dashboard()
-            elif role == "voter": 
-                voter_business.voter_dashboard()
-            
-            # 4. Clean up after logout
-            admin_business.current_user = None
-            voter_business.current_user = None
-            auth.current_user = None
-            auth.current_role = None
+        ui.clear_screen()
+        user, role = auth.login()
+
+        if user is None:
+            continue
+
+        storage.current_user = user
+        storage.current_role = role
+
+        admin_business.set_current_user(user)
+        voter_business.set_current_user(user)
+
+        if role == "admin":
+            admin_business.admin_dashboard()
+        elif role == "voter":
+            voter_business.voter_dashboard()
+
+        _reset_session()
+
 
 if __name__ == "__main__":
     main()

@@ -1,24 +1,18 @@
-import datetime
-import hashlib
-import random
-import string
-import json
 import os
-import time
 import sys
 
 
 if sys.platform == "win32":
     os.system("")
 
-### base colors
+# Base colors
 RESET = "\033[0m"
 BOLD = "\033[1m"
 DIM = "\033[2m"
 ITALIC = "\033[3m"
 UNDERLINE = "\033[4m"
 
-### foreground
+# Foreground colors
 BLACK = "\033[30m"
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -36,7 +30,7 @@ BRIGHT_MAGENTA = "\033[95m"
 BRIGHT_CYAN = "\033[96m"
 BRIGHT_WHITE = "\033[97m"
 
-## backgrounds
+# Background colors
 BG_RED = "\033[41m"
 BG_GREEN = "\033[42m"
 BG_YELLOW = "\033[43m"
@@ -47,22 +41,25 @@ BG_WHITE = "\033[47m"
 BG_GRAY = "\033[100m"
 
 
-### theme colors per context
+# Theme colors per context
 THEME_LOGIN = BRIGHT_CYAN
 THEME_ADMIN = BRIGHT_GREEN
 THEME_ADMIN_ACCENT = YELLOW
 THEME_VOTER = BRIGHT_BLUE
 THEME_VOTER_ACCENT = MAGENTA
 
+HEADER_WIDTH = 58
+CLEAR_SCREEN_COMMAND = "cls" if os.name == "nt" else "clear"
+
 
 def colored(text, color):
     return f"{color}{text}{RESET}"
 
+
 def header(title, theme_color):
-    width = 58
-    top = f"  {theme_color}{'═' * width}{RESET}"
-    mid = f"  {theme_color}{BOLD} {title.center(width - 2)} {RESET}{theme_color} {RESET}"
-    bot = f"  {theme_color}{'═' * width}{RESET}"
+    top = f"  {theme_color}{'═' * HEADER_WIDTH}{RESET}"
+    mid = f"  {theme_color}{BOLD} {title.center(HEADER_WIDTH - 2)} {RESET}{theme_color} {RESET}"
+    bot = f"  {theme_color}{'═' * HEADER_WIDTH}{RESET}"
     print(top)
     print(mid)
     print(bot)
@@ -91,6 +88,7 @@ def success(msg):
 def warning(msg):
     print(f"  {YELLOW}{BOLD} {msg}{RESET}")
 
+
 def info(msg):
     print(f"  {GRAY}{msg}{RESET}")
 
@@ -107,6 +105,7 @@ def status_badge(text, is_good):
 
 def prompt(text):
     return input(f"  {BRIGHT_WHITE}{text}{RESET}").strip()
+
 
 def masked_input(prompt_text="Password: "):
     print(f"  {BRIGHT_WHITE}{prompt_text}{RESET}", end="", flush=True)
@@ -156,8 +155,10 @@ def masked_input(prompt_text="Password: "):
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
     return password
 
+
 def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system(CLEAR_SCREEN_COMMAND)
+
 
 def pause():
     input(f"\n  {DIM}Press Enter to continue...{RESET}")
