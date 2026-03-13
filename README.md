@@ -99,3 +99,11 @@ The codebase was validated through static diagnostics and import smoke tests aft
 
 - `e_voting_console_app.py` is the original monolithic source supplied before refactoring and is no longer the active entry point.
 - The active refactored application runs through `main.py`.
+
+## GROUP MEMBERS
+- RINGTHO MARLYN SOMERS S24B23/059
+- AKAMPURIRA AISHA S24B23/081
+- ASINGWIRE ARNOLD S24B23/013
+- ONYANG BRIDGET S24B23/107
+- KARUNJI JOAN LETICIA S24B23/014
+- WANYOTO MARK S24B23/114
